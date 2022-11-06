@@ -1,7 +1,21 @@
 import styled from 'styled-components';
 
-export const SimpleInputControlDiv = styled.div`
+interface SimpleInputControlDivProps {
+  className: string;
+}
+
+export const SimpleInputControlDiv = styled.div<SimpleInputControlDivProps>`
   margin-bottom: 1rem;
+
+  &.invalid input {
+    border: 1px solid #b40e0e;
+    background-color: #fddddd;
+  }
+
+  &.invalid input:focus {
+    border-color: #ff8800;
+    background-color: #fbe8d2;
+  }
 `;
 
 export const SimpleInputLabel = styled.label`
@@ -45,4 +59,8 @@ export const SimpleInputButton = styled.button`
     background-color: #33059e;
     border-color: #33059e;
   }
+`;
+
+export const SimpleInputErrorTextP = styled.p`
+  color: #b40e0e;
 `;
