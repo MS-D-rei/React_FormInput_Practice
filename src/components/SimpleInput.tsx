@@ -14,12 +14,19 @@ import {
   SimpleInputInput,
   SimpleInputLabel,
 } from '@/components/SimpleInputStyle';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function SimpleInput() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [enteredName, setEnteredName] = useState('');
   const [isValidEnteredName, setIsValidEnteredName] = useState(false);
+  const [isTouchedEnteredName, setIsTouchedEnteredName] = useState(false);
+
+  useEffect(() => {
+    if (isValidEnteredName) {
+      console.log('name is valid');
+    }
+  }, [isValidEnteredName]);
 
   const nameInputChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -31,6 +38,9 @@ function SimpleInput() {
     event.preventDefault();
     console.log(`State: ${enteredName}`);
     console.log(`Ref: ${nameInputRef.current?.value}`);
+
+    setIsTouchedEnteredName(true);
+
     if (enteredName.trim() === '') {
       setIsValidEnteredName(false);
       return;
@@ -39,7 +49,12 @@ function SimpleInput() {
     setIsValidEnteredName(true);
   };
 
-  const controlDivClassName = isValidEnteredName ? '' : 'invalid';
+  const controlDivClassName = !isValidEnteredName && isTouchedEnteredName ? 'invalid' : '';
+
+  const nameValidationErrorMessage = !isValidEnteredName &&
+    isTouchedEnteredName && (
+      <SimpleInputErrorTextP>Name must not be empty.</SimpleInputErrorTextP>
+    );
 
   return (
     <form onSubmit={formSubmitHandler}>
@@ -52,9 +67,7 @@ function SimpleInput() {
           value={enteredName}
           onChange={nameInputChangeHandler}
         />
-        {!isValidEnteredName && (
-          <SimpleInputErrorTextP>Name must not be empty.</SimpleInputErrorTextP>
-        )}
+        {nameValidationErrorMessage}
       </SimpleInputControlDiv>
       <SimpleInputActionsDiv>
         <SimpleInputButton>Submit</SimpleInputButton>
