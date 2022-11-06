@@ -19,14 +19,27 @@ import React, { useEffect, useRef, useState } from 'react';
 function SimpleInput() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [enteredName, setEnteredName] = useState('');
-  const [isValidEnteredName, setIsValidEnteredName] = useState(false);
+  // const [isValidEnteredName, setIsValidEnteredName] = useState(false);
   const [isTouchedEnteredName, setIsTouchedEnteredName] = useState(false);
+  // const [isValidForm, setIsValidForm] = useState(false);
 
-  useEffect(() => {
-    if (isValidEnteredName) {
-      console.log('name is valid');
-    }
-  }, [isValidEnteredName]);
+  /* isValidEnteredName is derived from enteredName. When enteredName state is changed,
+  isValidEnteredName is also re-evaluated */
+  const isValidEnteredName = enteredName.trim().length !== 0;
+
+  // useEffect(() => {
+  //   if (isValidEnteredName) {
+  //     setIsValidForm(true);
+  //   } else {
+  //     setIsValidForm(false);
+  //   }
+  // }, [isValidEnteredName]);
+
+  /* isValidForm is derived from isValidEnteredName, there is no advantage from useEffect */
+  let isValidForm = false;
+  if (isValidEnteredName) {
+    isValidForm = true;
+  }
 
   const nameInputChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -36,28 +49,17 @@ function SimpleInput() {
 
   const nameInputBlurHandler = () => {
     setIsTouchedEnteredName(true);
-    if (enteredName.trim().length === 0) {
-      setIsValidEnteredName(false);
-      return;
-    }
   };
 
   const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(`State: ${enteredName}`);
     console.log(`Ref: ${nameInputRef.current?.value}`);
-
     setIsTouchedEnteredName(true);
-
-    if (enteredName.trim() === '') {
-      setIsValidEnteredName(false);
-      return;
-    }
-
-    setIsValidEnteredName(true);
   };
 
-  const controlDivClassName = !isValidEnteredName && isTouchedEnteredName ? 'invalid' : '';
+  const controlDivClassName =
+    !isValidEnteredName && isTouchedEnteredName ? 'invalid' : '';
 
   const nameValidationErrorMessage = !isValidEnteredName &&
     isTouchedEnteredName && (
@@ -79,7 +81,7 @@ function SimpleInput() {
         {nameValidationErrorMessage}
       </SimpleInputControlDiv>
       <SimpleInputActionsDiv>
-        <SimpleInputButton>Submit</SimpleInputButton>
+        <SimpleInputButton disabled={!isValidForm}>Submit</SimpleInputButton>
       </SimpleInputActionsDiv>
     </form>
   );
