@@ -1,6 +1,6 @@
 ## Custom hook state management
 
-```
+```ts
 // SimpleInput.tsx
 const [enteredName, setEnteredName] = useState('');
 const [isTouchedName, setIsTouchedName] = useState(false);
@@ -16,7 +16,7 @@ const emailInputBlurHandler = () => {};
 
 Use custom hook (use-input.tsx)
 
-```
+```ts
 /* every useInput creates its state relatively, when the state changes, useInput func is executed. */
 const {
   enteredValue: enteredName,
