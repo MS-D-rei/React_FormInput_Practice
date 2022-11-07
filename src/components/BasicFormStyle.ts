@@ -6,10 +6,24 @@ export const BasicFormDiv = styled.div`
   flex-wrap: wrap;
 `;
 
-export const BasicFormControlDiv = styled.div`
+interface BasicFormControlDivProps {
+  className: string;
+}
+
+export const BasicFormControlDiv = styled.div<BasicFormControlDivProps>`
   margin-bottom: 1rem;
   min-width: 15rem;
   flex: 1;
+
+  &.invalid input {
+    border: 1px solid #b40e0e;
+    background-color: #fddddd;
+  }
+
+  &.invalid input:focus {
+    border-color: #ff8800;
+    background-color: #fbe8d2;
+  }
 `;
 
 export const BasicFormLabel = styled.label`
@@ -34,6 +48,10 @@ export const BasicFormInput = styled.input`
   }
 `;
 
+export const BasicFormErrorTextP = styled.p`
+  color: #b40e0e;
+`;
+
 export const BasicFormActionsDiv = styled.div`
   text-align: right;
 `;
@@ -52,5 +70,14 @@ export const BasicFormButton = styled.button`
   &:active {
     background-color: #33059e;
     border-color: #33059e;
+  }
+
+  &:disabled,
+  &:disabled:hover,
+  &:disabled:active {
+    background-color: #ccc;
+    color: #292929;
+    border-color: #ccc;
+    cursor: not-allowed;
   }
 `;

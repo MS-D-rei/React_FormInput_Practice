@@ -3,10 +3,12 @@ import {
   BasicFormButton,
   BasicFormControlDiv,
   BasicFormDiv,
+  BasicFormErrorTextP,
   BasicFormInput,
   BasicFormLabel,
 } from '@/components/BasicFormStyle';
 import { useBasicFormInput } from '@/hooks/use-basicform-input';
+import React from 'react';
 
 function BasicForm() {
   const {
@@ -30,10 +32,44 @@ function BasicForm() {
     valueInputChangeHandler: emailInputChangeHandler,
     valueInputBlurHandler: emailInputBlurHandler,
   } = useBasicFormInput({ type: 'email' });
+
+  // Form validation
+  let isValidForm = false;
+  if (isValidFirstName && isValidLastName && isValidEmail) {
+    isValidForm = true;
+  } else {
+    isValidForm = false;
+  }
+
+  // Each className for ControlDiv
+  const firstNameControlDivClassName =
+    !isValidFirstName && isTouchedFirstName ? 'invalid' : '';
+  const lastNameControlDivClassName =
+    !isValidLastName && isTouchedLastName ? 'invalid' : '';
+  const emailControlDivClassName =
+    !isValidEmail && isTouchedEmail ? 'invalid' : '';
+
+  // Each error message
+  const firstNameInputErrorMessage = !isValidFirstName &&
+    isTouchedFirstName && (
+      <BasicFormErrorTextP>Please enter your first name.</BasicFormErrorTextP>
+    );
+  const lastNameInputErrorMessage = !isValidLastName && isTouchedLastName && (
+    <BasicFormErrorTextP>Please enter your last name.</BasicFormErrorTextP>
+  );
+  const emailInputErrorMessage = !isValidEmail && isTouchedEmail && (
+    <BasicFormErrorTextP>Please enter valid email</BasicFormErrorTextP>
+  );
+
+  const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Submitted successfully');
+  }
+
   return (
-    <form>
+    <form onSubmit={formSubmitHandler}>
       <BasicFormDiv>
-        <BasicFormControlDiv>
+        <BasicFormControlDiv className={firstNameControlDivClassName}>
           <BasicFormLabel htmlFor="first-name">First Name</BasicFormLabel>
           <BasicFormInput
             type="text"
@@ -42,8 +78,9 @@ function BasicForm() {
             onChange={firstNameInputChangeHandler}
             onBlur={firstNameInputBlurHander}
           />
+          {firstNameInputErrorMessage}
         </BasicFormControlDiv>
-        <BasicFormControlDiv>
+        <BasicFormControlDiv className={lastNameControlDivClassName}>
           <BasicFormLabel htmlFor="last-name">Last Name</BasicFormLabel>
           <BasicFormInput
             type="text"
@@ -52,8 +89,9 @@ function BasicForm() {
             onChange={lastNameInputChangeHandler}
             onBlur={lastNameInputBlurHander}
           />
+          {lastNameInputErrorMessage}
         </BasicFormControlDiv>
-        <BasicFormControlDiv>
+        <BasicFormControlDiv className={emailControlDivClassName}>
           <BasicFormLabel htmlFor="email">E-mail Addresss</BasicFormLabel>
           <BasicFormInput
             type="email"
@@ -62,10 +100,11 @@ function BasicForm() {
             onChange={emailInputChangeHandler}
             onBlur={emailInputBlurHandler}
           />
+          {emailInputErrorMessage}
         </BasicFormControlDiv>
       </BasicFormDiv>
       <BasicFormActionsDiv>
-        <BasicFormButton>Submit</BasicFormButton>
+        <BasicFormButton disabled={!isValidForm}>Submit</BasicFormButton>
       </BasicFormActionsDiv>
     </form>
   );
