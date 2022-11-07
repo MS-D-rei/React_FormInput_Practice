@@ -21,7 +21,7 @@ function BasicForm() {
         </BasicFormControlDiv>
         <BasicFormControlDiv>
           <BasicFormLabel htmlFor="email">E-mail Addresss</BasicFormLabel>
-          <BasicFormInput type="text" id="email" />
+          <BasicFormInput type="email" id="email" />
         </BasicFormControlDiv>
       </BasicFormDiv>
       <BasicFormActionsDiv>
